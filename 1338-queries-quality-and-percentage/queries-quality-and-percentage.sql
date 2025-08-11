@@ -1,18 +1,16 @@
-# Write your MySQL query statement below
-with count_ as (
-select query_name, count(rating) as count1 from Queries
-where rating < 3
-group by query_name
+WITH stats AS (
+  SELECT 
+    query_name,
+    COUNT(*) AS total_count,
+    ROUND(SUM(rating / position) / COUNT(*), 2) AS quality,
+    SUM(CASE WHEN rating < 3 THEN 1 ELSE 0 END) AS poor_count
+  FROM Queries
+  GROUP BY query_name
 )
 
 SELECT 
-  q.query_name, 
-  ROUND(SUM(rating / position) / COUNT(*), 2) AS quality,
-  CASE 
-    WHEN ROUND(count1 / COUNT(*) * 100, 2) IS NULL THEN 0 
-    ELSE ROUND(count1 / COUNT(*) * 100, 2) 
-  END AS poor_query_percentage
-FROM Queries q
-LEFT JOIN count_ a ON a.query_name = q.query_name
-GROUP BY q.query_name;
+  query_name,
+  quality,
+  ROUND(poor_count / total_count * 100, 2) AS poor_query_percentage
+FROM stats;
 
