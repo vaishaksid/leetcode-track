@@ -1,10 +1,7 @@
 # Write your MySQL query statement below
-with agg as (
-select stock_name, operation, operation_day, 
-CASE WHEN operation = 'Sell' THEN -1 * price ELSE price END as price
-from Stocks
-)
-
-select stock_name, -1 * sum(price) as capital_gain_loss from agg
-group by stock_name
-
+SELECT stock_name,
+       SUM(CASE WHEN operation = 'Buy' THEN -price
+                WHEN operation = 'Sell' THEN price
+           END) AS capital_gain_loss
+FROM Stocks
+GROUP BY stock_name;
