@@ -59,4 +59,3 @@ SELECT
     chargeback_count,
     chargeback_amount
 FROM full_join_union
-ORDER BY month, country;
