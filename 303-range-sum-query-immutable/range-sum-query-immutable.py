@@ -3,7 +3,6 @@ class NumArray:
     def __init__(self, nums: List[int]):
         self.newarr = []
         self.runningSum = 0
-        self.out = []
         for i in range(0, len(nums)):
             self.runningSum += nums[i]
             self.newarr.append(self.runningSum)
